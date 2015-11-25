@@ -7,7 +7,7 @@ shared_examples 'WpItems::Detectable' do
   let(:targets_items_file) { fixtures_dir + '/targets.txt' }
   let(:wp_content_dir)     { 'wp-content' }
   let(:wp_plugins_dir)     { wp_content_dir + '/plugins' }
-  let(:wp_local_dir)          { SPEC_FIXTURES_DIR + '/wpscan/wp_local_dir' }
+  let(:wp_local_dir)       { SPEC_FIXTURES_DIR + '/wpscan/wp_local_dir' }
   let(:wp_target)          { WpTarget.new(url, wp_content_dir: wp_content_dir, wp_plugins_dir: wp_plugins_dir, wp_local_dir: wp_local_dir) }
   let(:url)                { 'http://example.com/' }
   let(:uri)                { URI.parse(url) }
