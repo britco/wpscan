@@ -20,7 +20,7 @@ class WpItem
       end
       exists_from_response?(response, options)
     end
-    
+
     # @return [ Boolean ]
     def exists_from_path?()
       unless wp_local_dir.to_s and uri.path.to_s
