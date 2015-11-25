@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require 'uri'
+
 require WPSCAN_LIB_DIR + '/wp_target'
 
 shared_examples 'WpItems::Detectable' do
