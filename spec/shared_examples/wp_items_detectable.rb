@@ -7,7 +7,7 @@ shared_examples 'WpItems::Detectable' do
   let(:targets_items_file) { fixtures_dir + '/targets.txt' }
   let(:wp_content_dir)     { 'wp-content' }
   let(:wp_plugins_dir)     { wp_content_dir + '/plugins' }
-  let(:wp_local_dir)          { SPEC_FIXTURES_DIR + '/wpscan/local_dir' }
+  let(:wp_local_dir)          { SPEC_FIXTURES_DIR + '/wpscan/wp_local_dir' }
   let(:wp_target)          { WpTarget.new(url, wp_content_dir: wp_content_dir, wp_plugins_dir: wp_plugins_dir, wp_local_dir: wp_local_dir) }
   let(:url)                { 'http://example.com/' }
   let(:uri)                { URI.parse(url) }
@@ -160,10 +160,6 @@ shared_examples 'WpItems::Detectable' do
   end
   
   describe '::directory_detection' do
-    def stub_targets_dont_exist(targets)
-      targets.each { |t| allow(t).to receive(:exists?).and_return(false) }
-    end
-  
     let(:options) { {} }
   
     after do
@@ -177,57 +173,16 @@ shared_examples 'WpItems::Detectable' do
   
     context 'when :type = :vulnerable' do
       let(:options) { { type: :vulnerable } }
-      let(:targets) { expected[:vulnerable_targets_items] }
-  
-      it 'only checks and return vulnerable targets' do
-        samples           = targets.sample(2)
-        fixed_target      = samples[0]
-        vulnerable_target = samples[1]
-  
-        stub_targets_dont_exist(targets)
-        
-        allow(vulnerable_target).to receive(:exists_from_path?).and_return(true)
+      let(:targets) { expected[:directory_detection] }
+      
+      it 'scans and returns vulnerable items from sample directory' do
+        vulnerable_target = targets[0]
+      
         allow(vulnerable_target).to receive(:vulnerable?).and_return(true)
-        
-        allow(fixed_target).to receive(:exists_from_path?).and_return(true)
-        allow(fixed_target).to receive(:vulnerable?).and_return(false)
-        
+      
         @expected = subject.new << vulnerable_target
-        
+      
         expect(subject).to receive(:targets_items).and_return(targets)
-      end
-    #
-      context 'when all targets dont exist' do
-        it 'returns an empty WpItems' do
-          stub_targets_dont_exist(targets)
-          expect(subject).to receive(:targets_items).and_return(targets)
-          @expected = subject.new
-        end
-      end
-    end
-    
-    context 'when no :type = :vulnerable' do
-      let(:targets) { (expected[:vulnerable_targets_items] + expected[:targets_items_from_file]).uniq { |t| t.name } }
-    
-      it 'checks all targets, and merge the results with passive_detection' do
-        target    = targets.sample
-        @expected = expected[:passive_detection] << target
-    
-        stub_targets_dont_exist(targets)
-        allow(target).to receive(:exists_from_path?).and_return(true)
-    
-        expect(subject).to receive(:targets_items).and_return(targets)
-        expect(subject).to receive(:passive_detection).and_return(expected[:passive_detection])
-      end
-    
-      context 'when all targets dont exist' do
-        it 'returns the result from passive_detection' do
-          @expected = expected[:passive_detection]
-    
-          stub_targets_dont_exist(targets)
-          expect(subject).to receive(:targets_items).and_return(targets)
-          expect(subject).to receive(:passive_detection).and_return(@expected)
-        end
       end
     end
   end

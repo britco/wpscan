@@ -3,7 +3,10 @@
 class WpItem
   module Existable
 
-    # Check the existence of the WpItem
+    # Check the existence of the WpItem.
+    # If the wp_item is tied to a target using a local WPdirectory, it just
+    # returns if the plugin exists in that WP file system.
+    #
     # If the response is supplied, it's used for the verification
     # Otherwise a new request is done
     #
@@ -18,17 +21,19 @@ class WpItem
       exists_from_response?(response, options)
     end
     
-    # @param [ string ] localpath
-    # @param [ string ] basedir
-    # @param [ options ] options
-    #
     # @return [ Boolean ]
-    def exists_from_path?(localpath, basedir = '', options = {})
-      basedir = File.expand_path(basedir.to_s)
-      localpath = File.join(basedir, File.expand_path(localpath.to_s))
-
-      File.directory?(localpath)
+    def exists_from_path?()
+      unless wp_local_dir.to_s and uri.path.to_s
+        false
+      end
+      
+      haystack = File.expand_path(wp_local_dir.to_s)
+      needle = File.join(haystack, File.expand_path(uri.path.to_s))
+      
+      not File.identical?(needle, haystack) and File.directory?(needle)
     end
+    
+    protected
 
     # @param [ Typhoeus::Response ] response
     # @param [ options ] options

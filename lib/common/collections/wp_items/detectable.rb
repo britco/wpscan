@@ -66,7 +66,7 @@ class WpItems < Array
       targets       = targets_items(wp_target, options)
       
       targets.each do |target_item|
-        if target_item.exists_from_path?(target_item.path, wp_target.wp_local_dir)
+        if target_item.exists_from_path?
           results << target_item unless results.include?(target_item)
         end
       end
@@ -222,7 +222,8 @@ class WpItems < Array
         name:           name,
         vulns_file:     vulns_file,
         wp_content_dir: wp_target.wp_content_dir,
-        wp_plugins_dir: wp_target.wp_plugins_dir
+        wp_plugins_dir: wp_target.wp_plugins_dir,
+        wp_local_dir:   wp_target.wp_local_dir
       )
     end
 
