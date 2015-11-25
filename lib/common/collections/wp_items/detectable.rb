@@ -66,7 +66,7 @@ class WpItems < Array
       targets       = targets_items(wp_target, options)
       
       targets.each do |target_item|
-        if target_item.exists_from_path?(target_item.path, wp_target.local_dir)
+        if target_item.exists_from_path?(target_item.path, wp_target.wp_local_dir)
           results << target_item unless results.include?(target_item)
         end
       end

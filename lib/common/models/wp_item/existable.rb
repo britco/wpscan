@@ -1,5 +1,4 @@
 # encoding: UTF-8
-require 'pathname'
 
 class WpItem
   module Existable
@@ -25,9 +24,9 @@ class WpItem
     #
     # @return [ Boolean ]
     def exists_from_path?(localpath, basedir = '', options = {})
-      basedir = File.expand_path(basedir)
-      localpath = File.join(basedir, File.expand_path(localpath))
-      print localpath
+      basedir = File.expand_path(basedir.to_s)
+      localpath = File.join(basedir, File.expand_path(localpath.to_s))
+
       File.directory?(localpath)
     end
 
