@@ -11,7 +11,7 @@ class WpItem
     # Otherwise a new request is done
     #
     # @param [ Hash ] options See exists_from_response?
-    # @param [ Mixed ] response
+    # @param [ Typhoeus::Response ] response
     #
     # @return [ Boolean ]
     def exists?(options = {}, response = nil)
