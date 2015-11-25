@@ -27,6 +27,7 @@ class WpTarget < WebSite
     @verbose        = options[:verbose]
     @wp_content_dir = options[:wp_content_dir]
     @wp_plugins_dir = options[:wp_plugins_dir]
+    @local_dir      = options[:local_dir]
     @multisite      = nil
     @vhost = options[:vhost]
 
@@ -35,6 +36,11 @@ class WpTarget < WebSite
       Browser.instance.vhost = @vhost
     end
 
+  end
+  
+  # @return [ String ] The local directory
+  def local_dir
+    @local_dir
   end
 
   # check if the target website is

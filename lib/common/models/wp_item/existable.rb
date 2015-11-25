@@ -1,4 +1,5 @@
 # encoding: UTF-8
+require 'pathname'
 
 class WpItem
   module Existable
@@ -8,7 +9,7 @@ class WpItem
     # Otherwise a new request is done
     #
     # @param [ Hash ] options See exists_from_response?
-    # @param [ Typhoeus::Response ] response
+    # @param [ Mixed ] response
     #
     # @return [ Boolean ]
     def exists?(options = {}, response = nil)
@@ -17,8 +18,18 @@ class WpItem
       end
       exists_from_response?(response, options)
     end
-
-    protected
+    
+    # @param [ string ] localpath
+    # @param [ string ] basedir
+    # @param [ options ] options
+    #
+    # @return [ Boolean ]
+    def exists_from_path?(localpath, basedir = '', options = {})
+      basedir = File.expand_path(basedir)
+      localpath = File.join(basedir, File.expand_path(localpath))
+      print localpath
+      File.directory?(localpath)
+    end
 
     # @param [ Typhoeus::Response ] response
     # @param [ options ] options
